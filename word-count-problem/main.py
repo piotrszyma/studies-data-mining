@@ -79,28 +79,33 @@ def create_clouds_for_chapters(chapter_lines):
 
 
 def create_weighted_clouds_for_chapters(chapter_lines):
-    chapter_to_words = {
-        idx: tuple(extract_distinct_words_from_lines(chapter_lines))
-        for idx, chapter_lines in enumerate(chapters_lines)
-    }
+    chapters_words = [
+        tuple(extract_distinct_words_from_lines(chapter_lines))
+        for chapter_lines in chapters_lines]
 
-    for chapter_idx, words_in_chapter in chapter_to_words.items():
+    for chapter_idx, words_in_chapter in enumerate(chapters_words, 1):
         words_in_chapter_weights = {}
         for word in set(words_in_chapter):
             words_in_chapter_weights[word] = (
-                tf_idf_weights(word, words_in_chapter, chapter_to_words.values()))
+                tf_idf_weights(word, words_in_chapter, chapters_words))
 
         cloud = wordcloud.WordCloud(background_color="white", max_words=20000)
         cloud.generate_from_frequencies(words_in_chapter_weights)
         cloud.to_file(f"clouds/tf_idf/chapter_{chapter_idx}_cloud.png")
 
 
+def create_weighted_cloud_for_book():
+    ...
+
 
 def main():
     lines = tuple(read_lines_from_file("pride-and-prejudice.txt"))
     chapters_lines = split_into_chapters(lines)
 
+
+
     # create_weighted_clouds_for_chapters(chapters_lines)
+
 
 
 
