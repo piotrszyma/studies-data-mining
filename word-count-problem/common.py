@@ -16,7 +16,7 @@ def read_lines_from_file(filename: Text) -> Sequence[Text]:
 
 TRANS_PUNCTUATION = str.maketrans(
     {s: None
-     for s in string.punctuation + "“”" + string.digits})
+     for s in string.punctuation + "“”" + string.digits + '\ufeff'})
 
 
 def extract_words_from_lines(lines: Sequence[Text]) -> Sequence[Text]:
@@ -24,7 +24,7 @@ def extract_words_from_lines(lines: Sequence[Text]) -> Sequence[Text]:
         line = line.translate(TRANS_PUNCTUATION)
         words = (word.strip() for word in line.split(" "))
         words = (word for word in words if word not in STOP_WORDS)
-        words = (stem(word.lower()) for word in words)
+        words = (word.lower() for word in words if word)
         yield from words
 
 
