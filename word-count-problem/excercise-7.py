@@ -28,7 +28,9 @@ def main():
     for chapter_idx, words in enumerate(words_per_chapter, 1):
         weight_in_chapter = common.tf_idf_weights(checked_word, words,
                                                   words_per_chapter)
-        weights_in_chapters.append((chapter_idx, weight_in_chapter))
+        weights_in_chapters.append(
+            'chapter=%s,weight=%s,count=%s' %
+            (chapter_idx, weight_in_chapter, words.count(checked_word)))
 
     pprint.pprint(sorted(weights_in_chapters, key=operator.itemgetter(1)))
 
